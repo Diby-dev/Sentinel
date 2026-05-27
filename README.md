@@ -5,8 +5,8 @@
 # Sentinel – Logiciel Antivirus Desktop (Electron + C++)
 
 > **Projet Personnel**  
-> **Statut :** En développement actif  
-> **Type :** Application Desktop Antivirus
+> **Statut :** En développement terminé. 
+> **Type :** Application Desktop Antivirus.
 
 ---
 
