@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>SENTINEL</title>
+    <style>
+        body {
+            background: #0b0c10;
+            color: #c5c6c7;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 10px; /* espace entre le logo et le texte */
+        }
+
+        .header img {
+            width: 60px;  /* taille du logo */
+            height: 60px;
+            border-radius: 50%; /* ✅ rend l'image circulaire */
+            object-fit: cover; /* garde le bon cadrage */
+            border: 2px solid #66fcf1; /* ✅ petit contour stylé */
+            box-shadow: 0 0 10px #45a29e; /* effet lumineux */
+        }
+
+        .header h1 {
+            color: #ffffff;
+            font-size: 2.2em;
+            margin: 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #1f2833;
+            color: #66fcf1;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 10px 5px;
+        }
+
+        #results {
+            text-align: left;
+            width: 80%;
+            margin: 20px auto;
+            background: #1f2833;
+            border-radius: 8px;
+            padding: 10px;
+            height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- SECTION DU TITRE -->
+    <div class="header">
+        <img src="assets/logo.png" alt="Sentinel Logo">
+        <h1>SENTINEL</h1>
+    </div>
+
+    <!-- BOUTONS -->
+    <button id="scanButton">🔍 Scan complet du disque</button>
+    <button id="pauseButton" disabled>❌ Annuler</button>
+
+    <!-- RESULTATS -->
+    <div id="results"></div>
+
+    <script src="renderer2.js"></script>
+</body>
+</html>

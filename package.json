@@ -1,0 +1,55 @@
+{
+  "name": "sentinel",
+  "version": "1.0.0",
+  "description": "Sentinel Antivirus - Electron + native scanner",
+  "main": "main.js",
+  "author": "Dan",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --windows nsis"
+  },
+  "dependencies": {
+    
+  },
+  "devDependencies": {
+    "electron": "^38.1.2",
+    "electron-builder": "^25.0.5"
+  },
+  "build": {
+    "appId": "com.sentinel.antivirus",
+    "productName": "Sentinel",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*"
+    ],
+    
+    "extraResources": [
+  { "from": "build/scanner.exe", "to": "bin/scanner.exe" },
+  { "from": "build/antivirus.exe", "to": "bin/antivirus.exe" },
+  { "from": "build/signatures.txt", "to": "data/signatures.txt" },
+  { "from": "quarantine", "to": "quarantine" }
+],
+
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64", "ia32"]
+        }
+      ],
+      "requestedExecutionLevel": "requireAdministrator",
+      "icon": "assets/kompe.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Sentinel"
+    }
+  }
+}

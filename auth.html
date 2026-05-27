@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Accès Sentinel</title>
+  <link rel="stylesheet" href="style.css"> <!--oui il partage un peu le même fichier css que index.html (c'est pour juste la couleur de l'interface)-->
+  <style>  /* la partie css du fichier auth.html */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #0b132b, #1c2541, #3a506b);
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+    #auth-box {
+      background: rgba(255,255,255,0.1);
+      padding: 30px;
+      border-radius: 20px;
+      width: 350px;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    }
+    input {
+      width: 80%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
+      text-align: center;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #0078ff;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #00aaff;
+    }
+    #warning {
+      color: yellow;
+      font-size: 12px;
+      margin-top: 10px;
+    }
+    #error-message {
+      color: #ff4b4b;
+      font-size: 13px;
+      margin-top: 8px;
+      display: none;
+    }
+    #change-link {
+      color: #00aaff;
+      font-size: 13px;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div id="auth-box">
+    <h2 id="title">Création du code Sentinel</h2>
+
+    <!-- Création du code -->
+    <div id="create-form">
+      <input id="new-code" type="password" placeholder="Créer un code">
+      <input id="new-hint" type="text" placeholder="Indice (facultatif)">
+      <button id="save-code">Enregistrer</button>
+      <p id="warning">⚠️ Veuillez ne pas oublier votre code. Notez-le quelque part par précaution.</p>
+    </div>
+
+    <!-- Connexion -->
+    <div id="login-form" style="display:none;">
+      <input id="entered-code" type="password" placeholder="Entrer votre code">
+      <button id="login-btn">Entrer</button>
+      <p id="hint-text"></p>
+      <p id="error-message">❌ Code incorrect, veuillez réessayer.</p>
+      <p id="change-link">🔒 Changer le code Sentinel</p>
+    </div>
+
+    <!-- Changement de code -->
+    <div id="change-form" style="display:none;">
+      <h3>Changer le code Sentinel</h3>
+      <input id="old-code" type="password" placeholder="Ancien code">
+      <input id="new-code-change" type="password" placeholder="Nouveau code">
+      <input id="new-hint-change" type="text" placeholder="Nouvel indice (facultatif)">
+      <button id="change-btn">Modifier</button>
+      <button id="cancel-change">Annuler</button>
+      <p id="error-change" style="color:#ff4b4b; font-size:13px; display:none;">❌ Ancien code incorrect.</p>
+      <p id="success-change" style="color:#00ff88; font-size:13px; display:none;">✅ Code changé avec succès.</p>
+    </div>
+  </div>
+
+  <script> // la partie renderer du fichier auth.html
+    const { ipcRenderer } = require('electron');
+
+    // Vérifie si un code existe déjà
+    ipcRenderer.invoke('check-code-exists').then(exists => {
+      if (exists) {
+        document.getElementById('create-form').style.display = 'none';
+        document.getElementById('login-form').style.display = 'block';
+        document.getElementById('title').textContent = 'Entrer le code Sentinel';
+        ipcRenderer.invoke('get-hint').then(hint => {
+          if (hint) document.getElementById('hint-text').textContent = "💡 Indice : " + hint;
+        });
+      }
+    });
+
+    // Sauvegarde d’un nouveau code
+    document.getElementById('save-code').addEventListener('click', async () => {
+      const code = document.getElementById('new-code').value.trim();
+      const hint = document.getElementById('new-hint').value.trim();
+      if (!code) return alert('Veuillez entrer un code.');
+      await ipcRenderer.invoke('save-code', code, hint);
+      alert('Code enregistré avec succès ✅');
+      ipcRenderer.send('auth-success');
+    });
+
+    // Vérification du code (connexion)
+    document.getElementById('login-btn').addEventListener('click', async () => {
+      const entered = document.getElementById('entered-code').value.trim();
+      const ok = await ipcRenderer.invoke('check-code', entered);
+      const errorMessage = document.getElementById('error-message');
+      if (ok) {
+        errorMessage.style.display = 'none';
+        ipcRenderer.send('auth-success');
+      } else {
+        errorMessage.style.display = 'block';
+      }
+    });
+
+    // Affiche le formulaire de changement de code
+    document.getElementById('change-link').addEventListener('click', () => {
+      document.getElementById('login-form').style.display = 'none';
+      document.getElementById('change-form').style.display = 'block';
+      document.getElementById('title').textContent = 'Modifier le code Sentinel';
+    });
+
+    // Annuler changement
+    document.getElementById('cancel-change').addEventListener('click', () => {
+      document.getElementById('change-form').style.display = 'none';
+      document.getElementById('login-form').style.display = 'block';
+      document.getElementById('title').textContent = 'Entrer le code Sentinel';
+    });
+
+    // Enregistrer le nouveau code
+    document.getElementById('change-btn').addEventListener('click', async () => {
+      const oldCode = document.getElementById('old-code').value.trim();
+      const newCode = document.getElementById('new-code-change').value.trim();
+      const newHint = document.getElementById('new-hint-change').value.trim();
+
+      const ok = await ipcRenderer.invoke('check-code', oldCode);
+      const err = document.getElementById('error-change');
+      const success = document.getElementById('success-change');
+
+      if (!ok) {
+        err.style.display = 'block';
+        success.style.display = 'none';
+        return;
+      }
+
+      err.style.display = 'none';
+      await ipcRenderer.invoke('save-code', newCode, newHint);
+      success.style.display = 'block';
+
+      setTimeout(() => {
+        document.getElementById('change-form').style.display = 'none';
+        document.getElementById('login-form').style.display = 'block';
+        document.getElementById('title').textContent = 'Entrer le code Sentinel';
+        success.style.display = 'none';
+      }, 1500);
+    });
+  </script>
+</body>
+</html>

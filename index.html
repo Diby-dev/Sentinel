@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Sentinel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="title-bar"> 
+    <img src="assets/kiop.png" alt="Logo Sentinel" class="title-logo">
+    <span class="title">Sentinel</span> <!-- le titre à gauche sur la barre haute (la barre qui contient à droite – ⬜ X) -->
+    <div class="buttons window-controls">
+        <button id="min">–</button>
+        <button id="max">⬜</button>  <!-- création des boutons – ⬜ X , vu que j'ai effacé la version donnée par defaut par électron, afin de pourvoir les personnaliser -->
+        <button id="close">✕</button>
+    </div>
+</div>
+
+
+    <div id="welcome">
+        <h1>Bienvenue sur Sentinel</h1>
+    </div>
+
+    <div id="interface"> <!-- toute l'interface utilisateur-->
+        <h1 id="interface-title"></h1>
+
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div><!-- bulles flottante sur l'interface 4 bulles differentes voir leurs caratéristiques dans le css-->
+        <div class="bubble"></div>
+
+        <div id="section-securite" class="section active">
+            <img src="assets/logo.png" alt="Sentinel Logo" class="section-logo"> <!-- logo sentinel en haut sur l'interface des titres-->
+            <h2>Cliquez sur le bouton ^ afin de pourvoir choisir une section</h2>      
+            <div class="section-content">
+                <div class="section-content">
+</div>
+
+            </div>
+        </div>
+        
+        <!-- Boîte de message scan rapide -->
+<div id="customMessageBox" style="display:none;">
+    <div id="cmb-content">
+        <span id="cmb-emoji">✅</span>
+        <span id="cmb-text">Fichier sûr</span>
+        <button id="cmb-ok">OK</button>
+    </div>
+</div>
+
+<!-- Boîte de message scan dossier -->
+<div id="folderScanMessageBox">
+    <h3>Résultat Scan Dossier</h3>
+    <h4 id="h4scd">Les fichier infectés seront mis en quarantaines</h4>
+    <p id="folderScanCounts">Clean: 0 | Infecté: 0</p>
+    <div id="folderScanList"></div>
+    <button id="folderScanOk">OK</button>
+</div>
+
+<!-- Boîte de message scan entier -->
+<div id="fullScanMessageBox" style="display:none;">
+    <div id="fullScanContent">
+        <h3>Scan entier</h3>
+        <div id="progressContainer">
+            <div id="progressBar"></div>
+        </div>
+        <span id="progressPercent">0%</span>
+        <button id="fullScanOk" style="display:none;">OK</button>
+    </div>
+</div>
+
+        <div id="section-analyse" class="section">
+            <img src="assets/logo.png" alt="Sentinel Logo" class="section-logo">
+            <h2>ANALYSE</h2>
+            <div class="section-content">
+                <button>Scan rapide</button>
+                <button>Scan de dossiers</button>
+                <button>Scan entier</button>
+                <button>supprimer fichier</button>
+                
+            </div>
+        </div>
+
+        <div id="section-mises-jour" class="section">
+            <img src="assets/logo.png" alt="Sentinel Logo" class="section-logo">
+            <h2>MISE A JOURS</h2>
+            <div class="section-content">
+                    <button>Mettre à jour</button>
+            </div>
+        </div>
+
+        <div id="section-historique" class="section">
+            <img src="assets/logo.png" alt="Sentinel Logo" class="section-logo">
+    <h2>HISTORIQUE</h2>
+    <div class="section-content">
+        <!-- Conteneur scrollable uniquement pour la liste -->
+        <div id="historique-scroll">
+            <table>
+                <tbody id="historique-body">
+                    <!-- Les entrées seront ajoutées ici -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+        <div id="section-quarantaine" class="section">
+            <img src="assets/logo.png" alt="Sentinel Logo" class="section-logo">
+            <h2>QUARANTAINE</h2>
+            <div class="section-content">
+                <table>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+                <!-- LA FONCTIONNALITE DE PARE FEU ET DE NAVIGATION A ETE RETIRE, MAIS POUR DES RAISON DE FONCTIONNEMENT DU LOGICIEL CETTE PARTIE DU CODE VA RESTER-->
+        <!-- pare-feu et navigation NULL = 0 (NE SERVENT A RIEN MAIS ME CAUSE DES SOUCIS SI JE LES ENLEVES)-->
+                     <div id="section-parefeu" class="section">
+                     <h2>Pare-feu</h2>
+                     <div class="section-content">
+                     <p>Status : <strong id="firewall-status">Activé ✅</strong></p>
+                    <button id="toggle-firewall">Désactiver</button>
+                    </div>
+                    </div>
+                    <div id="section-navigation" class="section">
+                    <h2>Navigation sécurisée</h2>
+                    <div class="section-content">
+                    <p>Status : <strong id="secure-browser-status">Mode sécurisé activé ✅</strong></p>
+                    <button id="toggle-secure-browser">Désactiver</button>
+                    </div>
+                    </div>
+        <!-- pare-feu et navigation NULL = 0 (NE SERVENT A RIEN MAIS ME CAUSE DES SOUCIS SI JE LES ENLEVES) -->
+         <!-- LA FONCTIONNALITE DE PARE FEU ET DE NAVIGATION A ETE RETIRE, MAIS POUR DES RAISON DE FONCTIONNEMENT DU LOGICIEL CETTE PARTIE DU CODE VA RESTER-->
+
+
+
+        <div id="sidebar">
+            <div class="sidebar-item" data-section="section-analyse"><div class="icon">🔍</div><div class="label">Analyse</div></div>
+            <div class="sidebar-item" data-section="section-mises-jour"><div class="icon">🔄</div><div class="label">Mises à jour</div></div> <!--bouton pour selectionner une des sections-->
+            <div class="sidebar-item" data-section="section-historique"><div class="icon">⚠️</div><div class="label">Historique</div></div>
+            <div class="sidebar-item" data-section="section-quarantaine"><div class="icon">🗄️</div><div class="label">Quarantaine</div></div>
+        </div>
+        <div id="topButtonsContainer">
+            <button id="settingsButton" class="topButton">⚙️</button>
+            <button id="notifButton" class="topButton">🔔</button>
+            <button id="helpButton" class="topButton">?</button>  
+        </div>
+
+        <button id="menuButton">⌃</button>
+    </div>
+
+    <div id="sidebars-container">
+        <div id="settings-sidebar" class="sidebar">
+            <h2>⚙️ Paramètres</h2>
+            <div class="sidebar-content">
+                <button onclick>vider l'historique</button>
+            </div>
+        </div>
+
+        <div id="notif-sidebar" class="sidebar">
+            <h2>🔔 Notifications</h2>
+            <div class="sidebar-content">
+            </div>
+        </div>
+
+        <div id="help-sidebar" class="sidebar">
+            <h2>❓ Aide</h2>
+            <div class="sidebar-content">
+                <button onclick="alert('1- Pour afficher la barre de selection des section cliquez sur le bouton ^ en bas au centre, après ca vous verrez la barre ouvert avec les différents boutons permettant accéder aux différentes sections.\n \n 2- les 3 boutons alignés en haut à gauche: le bouton ⚙️ est le bouton Paramètres, le bouton 🔔 permet de vérifier les Notifications et le bouton ❓ est le bouton Aide \n \n 3-Dans la section analyse, il y a le bouton scan rapide permettant de cibler (selectionner) un fichier afin de le scanner (analyser).\nIl y a aussi le bouton scan dossiers permettant de cibler un dossier. \nPour le bouton scan entier lorsque vous cliquez dessus, une 2ème fenêtre va se mettre en place, sur la 2ème fenêtre vous verrez le bouton 🔍 Scan complet du disque, lorsque vous cliquer dessus le scan complet de tous vos disques présent dans votre pc se lance (le scan peut durer 3h ou plus), il va scanner les repertoire en ordre alphabétique et décroissant (scanner les dossiers présent dans le disque c de Z à A) une fois le scan complèt lancé vous avez la possibilité de le stopper en cliquant sur le bouton ❌ Annuler. \nEnsuite la section Mise à jour contient un bouton permettant de mettre à jour votre antivirus. \nLa section historique permettant de voir les historique des analyses et des actions. \nLa section quarantaine qui recupère les fichiers infectés. ')">Comment utiliser Sentinel ?</button>
+                <button onclick="alert('01 52 22 63 12\n27 22 35 52 92\n05 65 24 69 74\ncourriel@ya-consulting.com')">Contactez-nous</button>
+            </div>
+        </div>
+    </div>
+    <div id="scanLoading" style="display:none;">
+    <div id="scanLoadingContent">
+        <p>⏳ Patientez, le scan est en cours...</p>
+    </div>
+</div>  
+    <script src="renderer.js"></script> <!--le fichier renderer de index.html, le fichier renderer est un fichier javascript qui gère les boutons (lorsqu'on clique sur un bouton il y a une un évènement qui survient), les formulaires, bref le renderer gère la logique des interface, la communication avec le main.js-->
+</body>
+</html>
