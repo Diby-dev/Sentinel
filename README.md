@@ -4,9 +4,9 @@
 
 # Sentinel – Logiciel Antivirus Desktop (Electron + C++)
 
-> **Projet Personnel**  
-> **Statut :** En développement terminé 
-> **Type :** Application Desktop Antivirus
+> **Projet réalisé chez :** personnel  
+> **Durée de réalisation :** 3 semaines  
+> **Statut :** Développement terminé
 
 ---
 
