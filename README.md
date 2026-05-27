@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.icons8.com/fluency/240/shield.png" width="180" alt="Sentinel Logo">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Electron_Software_Framework_Logo.svg" width="180" alt="Electron Logo">
 </p>
 
 # Sentinel – Logiciel Antivirus Desktop (Electron + C++)
@@ -53,6 +53,19 @@ Ce projet m’a également permis d’approfondir plusieurs domaines techniques 
 * **Système ciblé :** Windows
 
 ---
+
+Installation et Configuration Locale
+
+Si vous souhaitez cloner le projet et le lancer en local, suivez les étapes suivantes :
+
+### 1. Prérequis 
+Installer le framework Electron, Node.js, npm, un compilateur C++ (MinGW / g++) est requis.
+
+### 2. Clonage du dépôt
+```bash
+git clone https://github.com/Diby-dev/Sentinel
+cd Sentinel
+```
 
 ## Architecture du Projet
 
